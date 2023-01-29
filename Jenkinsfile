@@ -35,6 +35,8 @@ pipeline {
             steps {
                 dir('./keycloak-theme') {
                     sh 'mvn clean package'
+                    sh 'mkdir ../keycloak-deploy/deployments'
+                    sh 'cp ./target/*.jar ../keycloak-deploy/deployments/'
                 }
             }
         }
@@ -45,7 +47,6 @@ pipeline {
                 DEPLOY_PORT = "8787"
             }
             steps {
-                sh 'cp ./keycloak-theme/target/*.jar ./keycloak-deploy/deployments/'
                 sh 'echo ${DEPLOY_PASS} >> pass'
                 sh 'sshpass -Ppassphrase -f ./pass rsync -rv ./keycloak-deploy/ ${DEPLOY_HOST}:~/${FOLDER}'
                 sh 'sshpass -Ppassphrase -f ./pass ssh ${DEPLOY_HOST} cd \\~/${FOLDER} \\&\\& DEPLOY_PORT=${DEPLOY_PORT} BRANCH=${BRANCH} docker stack deploy --compose-file docker-compose.yml ${FOLDER}'
