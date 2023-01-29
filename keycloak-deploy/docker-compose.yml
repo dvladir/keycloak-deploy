@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  keycloak:
+    image: docker.dvladir.work/jboss/keycloak
+    ports:
+      - "${DEPLOY_PORT}:8080"
+    volumes:
+      - ./deployments/:/opt/jboss/keycloak/standalone/deployments/
+    env_file: ./.env
+    deploy:
+      replicas: 1
+    network_mode: bridge

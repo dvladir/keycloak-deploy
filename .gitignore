@@ -2,3 +2,5 @@
 *.env
 *.config
 .env.production
+*.gdsl
+lib
